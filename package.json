@@ -1,0 +1,27 @@
+{
+  "name": "@jurca/karma-e2e",
+  "version": "0.0.0",
+  "description": "Utility for E2E testing using karma. Utilizes wrapping the target page inside an iframe, which requires (sometimes) disabling some iframe-related security of the site, but does not require browser reconfiguration and thus should have better cross-browser compatibility.",
+  "main": "host.js",
+  "scripts": {
+    "test": "tslint --project . && jest && stryker run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jurca/karma-e2e.git"
+  },
+  "keywords": [
+    "karma",
+    "e2e"
+  ],
+  "author": "Martin Jurča <martin.jurca@firma.seznam.cz>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jurca/karma-e2e/issues"
+  },
+  "homepage": "https://github.com/jurca/karma-e2e#readme",
+  "devDependencies": {
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
+  }
+}
