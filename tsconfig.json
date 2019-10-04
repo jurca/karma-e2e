@@ -2,11 +2,17 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": [],
+    "lib": [
+      "es5",
+      "dom",
+      "es2015.promise",
+      "es2015.iterable"
+    ],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
+    "skipLibCheck": true,
 
     "strict": true,
 
