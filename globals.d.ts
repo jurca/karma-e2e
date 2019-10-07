@@ -1,5 +1,5 @@
 // tslint:disable-next-line:no-namespace
-namespace KarmaE2E {
+declare namespace KarmaE2E {
   interface IPageOptions {
     viewportWidth: number
     viewportHeight: number
