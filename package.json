@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "description": "Utility for E2E testing using karma. Utilizes wrapping the target page inside an iframe, which requires (sometimes) disabling some iframe-related security of the site, but does not require browser reconfiguration and thus should have better cross-browser compatibility.",
   "main": "host.js",
+  "types": "globals.d.ts",
   "scripts": {
     "compile": "browserify -p tsify guest.ts -o dist/guest.js && browserify -p tsify host.ts -o dist/host.js",
-    "build": "rm -rf dist && npm run compile && cp package.json LICENSE README.md dist/",
+    "build": "rm -rf dist && npm run compile && cp globals.d.ts package.json LICENSE README.md dist/",
     "test": "tslint --project . && jest && stryker run"
   },
   "repository": {
