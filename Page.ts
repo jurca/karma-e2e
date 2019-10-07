@@ -1,14 +1,3 @@
-export type IPage = { // tslint:disable-line interface-over-type-literal
-  checkExistence(selector: string, timeout?: number): Promise<number>,
-  setAttribute(selector: string, attribute: string, value: string, timeout?: number): Promise<number>,
-  getAttribute(selector: string, attribute: string, timeout?: number): Promise<null | string>,
-  removeAttribute(selector: string, attribute: string, timeout?: number): Promise<number>,
-}
-
-export type IPageEvalProvider = { // tslint:disable-line interface-over-type-literal
-  eval<R>(func: () => R): Promise<R>,
-}
-
 type IPageEvalImplementor = { // tslint:disable-line interface-over-type-literal
   eval<R>(funcSource: string): Promise<R>,
 }
@@ -16,7 +5,7 @@ type IPageEvalImplementor = { // tslint:disable-line interface-over-type-literal
 const DEFAULT_TIMEOUT = 10_000 // 10 seconds
 const ATTEMPT_INTERVAL = 200 // milliseconds
 
-export const PageImpl: IPage & IPageEvalImplementor = {
+export const PageImpl: KarmaE2E.IPage & IPageEvalImplementor = {
   checkExistence(selector: string, timeout: number = DEFAULT_TIMEOUT): Promise<number> {
     return runAttempts(
       () => selectElements(selector).length,

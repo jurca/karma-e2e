@@ -1,23 +1,14 @@
+// tslint:disable-next-line:no-reference
+/// <reference path="./globals.d.ts"/>
+
 import {createClient as createRpcClient} from '@jurca/post-message-rpc'
 import {COMMUNICATION_CHANNEL_ID} from './guest'
-import {IPage, IPageEvalProvider, PAGE_API_TEMPLATE} from './Page'
-
-interface IPageOptions {
-  viewportWidth: number
-  viewportHeight: number
-  navigationTimeout: number
-}
-
-interface IDestroyablePage {
-  destroy(): void
-}
-
-type IPageProxy = IPage & IPageEvalProvider & IDestroyablePage
+import {PAGE_API_TEMPLATE} from './Page'
 
 export function newPage(
   siteUrl: string,
-  options: IPageOptions,
-): Promise<IPageProxy> {
+  options: KarmaE2E.IPageOptions,
+): Promise<KarmaE2E.IPageProxy> {
   if (Math.floor(options.viewportWidth) !== options.viewportWidth || options.viewportWidth <= 0) {
     throw new TypeError(`The viewportWidth option must be a positive integer, ${options.viewportWidth} was provided`)
   }
@@ -58,13 +49,13 @@ export function newPage(
       throw new Error(`The ${siteUrl} site failed to load`)
     }
 
-    return createRpcClient<IPage & IPageEvalProvider>(
+    return createRpcClient<KarmaE2E.IPage & KarmaE2E.IPageEvalProvider>(
       clientFrame.contentWindow,
       {channel: COMMUNICATION_CHANNEL_ID},
       PAGE_API_TEMPLATE,
     )
   }).then((page) => {
-    const destroyablePage: IPageProxy = page as IPageProxy
+    const destroyablePage: KarmaE2E.IPageProxy = page as KarmaE2E.IPageProxy
     const evalInvoker = destroyablePage.eval
     destroyablePage.eval = <R>(func: () => R): Promise<R> => {
       // Functions cannot be cloned, so we have to serialize them to their source code. Because of this, all functions
@@ -79,4 +70,8 @@ export function newPage(
     }
     return destroyablePage
   })
+}
+
+if (typeof window === 'object' && window) {
+  window.newPage = newPage
 }
