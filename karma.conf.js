@@ -81,6 +81,10 @@ module.exports = function(config) {
           'es2015.iterable',
         ],
       },
+      reports: {
+        "html": "coverage",
+        "text": "",
+      }
     },
   })
 }
