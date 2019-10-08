@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <script>
+      addEventListener('message', (event) => {
+        if (event.data && event.data.messageId) {
+          event.source.postMessage({
+            channel: event.data.channel,
+            messageId: event.data.messageId,
+            received: true,
+          }, '*')
+
+          if (event.data.data && event.data.data.callId && event.data.data.procedure) {
+            const call = event.data.data
+            let result = null
+            const elements = call.procedure !== 'eval' ? select(call.arguments[0]) : []
+            switch (call.procedure) {
+              case 'checkExistence':
+                result = elements.length
+                break
+              case 'setAttribute':
+                elements.length ? elements[0].setAttribute(call.arguments[1], call.arguments[2]) : void 0
+                result = elements.length
+                break
+              case 'getAttribute':
+                result = elements.length ? elements[0].getAttribute(call.arguments[1]) : undefined
+                break
+              case 'removeAttribute':
+                elements.length ? elements[0].removeAttribute(call.arguments[1]) : void 0
+                result = elements.length
+                break
+              case 'eval':
+                result = eval(`(${call.arguments[0]})()`)
+                break
+              default:
+                break // ignore
+            }
+
+            event.source.postMessage({
+              channel: event.data.channel,
+              data: {
+                callId: call.callId,
+                result,
+              },
+              messageId: 'msgId',
+            }, '*')
+          }
+        }
+
+        function select(selector) {
+          return Array.prototype.slice.call(document.querySelectorAll(selector))
+        }
+      })
+    </script>
+  </head>
+  <body>
+    <div class="a-class"></div>
+    <div class="a-class"></div>
+  </body>
+</html>
