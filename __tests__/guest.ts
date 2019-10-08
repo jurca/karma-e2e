@@ -1,6 +1,7 @@
 import {COMMUNICATION_CHANNEL_ID} from '../guest'
 
 type TraceableFunction = ((...args: unknown[]) => void) & {calls: unknown[][]}
+type ResultCollector<R> = ((event: MessageEvent) => void) & {results: R[]}
 
 describe('guest', () => {
   it('should start a post message RPC server implementing the page proxy API', async () => {
@@ -40,4 +41,60 @@ describe('guest', () => {
 
     removeEventListener('message', eventListener)
   })
+
+  it('should allow checking the number of elements matching a CSS selector', async () => {
+    const resultCollector = createResultCollector<number>()
+    addEventListener('message', resultCollector)
+    callPageProcedure('checkExistence', 'body')
+    await awaitResultCount(resultCollector, 1)
+    expect(resultCollector.results[0]).toBe(1)
+    removeEventListener('message', resultCollector)
+  })
+
+  it('should allow getting a value of an attribute', async () => {
+    const resultCollector = createResultCollector<string>()
+    addEventListener('message', resultCollector)
+    document.body.setAttribute('data-testing-attribute', 'a value to test for')
+    callPageProcedure('getAttribute', 'body', 'data-testing-attribute')
+    await awaitResultCount(resultCollector, 1)
+    expect(resultCollector.results[0]).toBe('a value to test for')
+    removeEventListener('message', resultCollector)
+  })
+
+  async function awaitResultCount(resultCollector: ResultCollector<unknown>, minResults: number): Promise<void> {
+    while (resultCollector.results.length < minResults) {
+      await new Promise((resolve) => setTimeout(resolve, 10))
+    }
+  }
+
+  function callPageProcedure(procedure: string, ...args: unknown[]): void {
+    window.postMessage({
+      channel: COMMUNICATION_CHANNEL_ID,
+      data: {
+        arguments: args,
+        callId: 'callId',
+        procedure,
+      },
+      messageId: 'msgId',
+    }, '*')
+  }
+
+  function createResultCollector<R>(): ResultCollector<R> {
+    const results = [] as R[]
+
+    function listener(event: MessageEvent) {
+      if (event && event.data && event.data.data && 'result' in event.data.data) {
+        results.push(event.data.data.result)
+      }
+    }
+
+    Object.defineProperty(listener, 'results', {
+      enumerable: true,
+      get(): R[] {
+        return results
+      },
+    })
+
+    return listener as ResultCollector<R>
+  }
 })
