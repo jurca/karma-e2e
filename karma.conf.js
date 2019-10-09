@@ -81,6 +81,9 @@ module.exports = function(config) {
           'es2015.iterable',
         ],
       },
+      "exclude": [
+        "dist/**/*.ts"
+      ],
       reports: {
         "html": "coverage",
         "text": "",
