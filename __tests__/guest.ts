@@ -61,6 +61,37 @@ describe('guest', () => {
     removeEventListener('message', resultCollector)
   })
 
+  it('should allow removing an attribute', async () => {
+    const resultCollector = createResultCollector<number>()
+    addEventListener('message', resultCollector)
+    document.body.setAttribute('data-attribute-to-remove', 'a value')
+    callPageProcedure('removeAttribute', 'body', 'data-attribute-to-remove')
+    await awaitResultCount(resultCollector, 1)
+    expect(resultCollector.results[0]).toBe(1)
+    expect(document.body.hasAttribute('data-attribute-to-remove')).toBe(false)
+    removeEventListener('message', resultCollector)
+  })
+
+  it('should allow evaluating custom functions', async () => {
+    const resultCollector = createResultCollector<number>()
+    addEventListener('message', resultCollector)
+    const value = -15 - Math.floor(Math.random() * 1000)
+    callPageProcedure(
+      'eval',
+      `
+        function someFunction() {
+          var value = ${value}
+          document.body.setAttribute('data-eval-result', 'value:' + value)
+          return value
+        }
+      `,
+    )
+    await awaitResultCount(resultCollector, 1)
+    expect(resultCollector.results[0]).toBe(value)
+    expect(document.body.getAttribute('data-eval-result')).toBe(`value:${value}`)
+    removeEventListener('message', resultCollector)
+  })
+
   async function awaitResultCount(resultCollector: ResultCollector<unknown>, minResults: number): Promise<void> {
     while (resultCollector.results.length < minResults) {
       await new Promise((resolve) => setTimeout(resolve, 10))
