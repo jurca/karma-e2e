@@ -1,6 +1,6 @@
 {
   "name": "@jurca/karma-e2e",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Utility for E2E testing using karma. Utilizes wrapping the target page inside an iframe, which requires (sometimes) disabling some iframe-related security of the site, but does not require browser reconfiguration and thus should have better cross-browser compatibility.",
   "main": "host.js",
   "types": "globals.d.ts",
