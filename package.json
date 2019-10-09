@@ -6,7 +6,7 @@
   "types": "globals.d.ts",
   "scripts": {
     "compile": "browserify -p tsify guest.ts -o dist/guest.js && browserify -p tsify host.ts -o dist/host.js",
-    "build": "rm -rf dist && npm run compile && cp globals.d.ts package.json LICENSE README.md dist/",
+    "build": "rm -rf dist && npm test && npm run compile && cp globals.d.ts package.json LICENSE README.md dist/",
     "prepublishOnly": "echo 'Run \\'npm run publish-package\\' instead' && exit 1",
     "check-workspace": "git diff --exit-code >/dev/null && git diff --cached --exit-code >/dev/null",
     "publish-package": "npm run check-workspace && git push && git push --tags && npm run build && npm publish --access=public --ignore-scripts dist",
