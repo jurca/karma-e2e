@@ -57,7 +57,7 @@ export function newPage(
   }).then((page) => {
     const destroyablePage: KarmaE2E.IPageProxy = page as KarmaE2E.IPageProxy
     const evalInvoker = destroyablePage.eval
-    destroyablePage.eval = <R>(func: () => R): Promise<R> => {
+    destroyablePage.eval = <R>(func: () => R | PromiseLike<R>): Promise<R> => {
       // Functions cannot be cloned, so we have to serialize them to their source code. Because of this, all functions
       // passed to eval must not use their origin's context.
       return evalInvoker(func.toString() as any)

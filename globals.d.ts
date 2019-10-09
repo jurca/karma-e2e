@@ -14,7 +14,7 @@ declare namespace KarmaE2E {
   }
 
   type IPageEvalProvider = { // tslint:disable-line interface-over-type-literal
-    eval<R>(func: () => R): Promise<R>,
+    eval<R>(func: () => R | PromiseLike<R>): Promise<R>,
   }
 
   interface IDestroyablePage {
