@@ -7,7 +7,7 @@
   "scripts": {
     "compile": "browserify -p tsify guest.ts -o dist/guest.js && browserify -p tsify host.ts -o dist/host.js",
     "build": "rm -rf dist && npm run compile && cp globals.d.ts package.json LICENSE README.md dist/",
-    "test": "tslint --project . && jest && stryker run"
+    "test": "tslint --project . && karma start"
   },
   "repository": {
     "type": "git",
