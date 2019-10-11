@@ -5,7 +5,8 @@
   "main": "host.js",
   "types": "globals.d.ts",
   "scripts": {
-    "compile": "browserify -p tsify guest.ts -o dist/guest.js && browserify -p tsify host.ts -o dist/host.js",
+    "compile-file": "browserify -p tsify -g [ babelify --presets [ @babel/preset-env ] ] \"$FILE\".ts -o dist/\"$FILE\".js",
+    "compile": "FILE=guest npm run compile-file && FILE=host npm run compile-file",
     "build": "rm -rf dist && npm test && npm run compile && cp globals.d.ts package.json LICENSE README.md dist/",
     "prepublishOnly": "echo 'Run \\'npm run publish-package\\' instead' && exit 1",
     "check-workspace": "git diff --exit-code >/dev/null && git diff --cached --exit-code >/dev/null",
@@ -26,8 +27,12 @@
     "url": "https://github.com/jurca/karma-e2e/issues"
   },
   "homepage": "https://github.com/jurca/karma-e2e#readme",
+  "browserslist": "ie 11",
   "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
     "@types/jasmine": "^3.4.2",
+    "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "jasmine-core": "^3.5.0",
     "karma": "^4.3.0",
