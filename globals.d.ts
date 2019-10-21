@@ -4,6 +4,7 @@ declare namespace KarmaE2E {
     viewportWidth: number
     viewportHeight: number
     navigationTimeout: number
+    strictNavigation?: boolean
   }
 
   type IPage = { // tslint:disable-line interface-over-type-literal

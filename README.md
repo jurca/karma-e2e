@@ -62,6 +62,14 @@ describe('website tests', () => {
       navigationTimeout: 10_000, // milliseconds
       viewportWidth: 1240, // px
       viewportHeight: 1024, // px
+      // If set to true, the newPage function will require the load event to
+      // occur on the loaded page within the specified timeout. If omitted or
+      // set to false, the page will be considered loaded after the navigation
+      // timeout. It is recommend to have this flag set to false for pages
+      // containing advertising, as adverts tend to be very flaky and may make
+      // the load event never occur, even if the page itself is already loaded.
+      // Defaults to false.
+      strictNavigation: false
     })
 
     // We'll assume that we have a login link on our site if it has initialized

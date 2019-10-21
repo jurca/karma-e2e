@@ -28,11 +28,15 @@ export function newPage(
 
   return new Promise((resolve, reject) => {
     const navigationTimeoutId = setTimeout(() => {
-      const timeoutError = new Error(
-        `The navigation to ${siteUrl} timed out after ${options.navigationTimeout} milliseconds`,
-      )
-      timeoutError.name = 'TimeoutError'
-      reject(timeoutError)
+      if (options.strictNavigation) {
+        const timeoutError = new Error(
+          `The navigation to ${siteUrl} timed out after ${options.navigationTimeout} milliseconds`,
+        )
+        timeoutError.name = 'TimeoutError'
+        reject(timeoutError)
+      } else {
+        resolve()
+      }
     }, options.navigationTimeout)
     clientFrame.addEventListener('load', () => {
       clearTimeout(navigationTimeoutId)
