@@ -31,6 +31,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
+    "@jurca/post-message-rpc": "^1.0.1",
     "@types/jasmine": "^3.4.2",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
@@ -43,7 +44,5 @@
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   },
-  "dependencies": {
-    "@jurca/post-message-rpc": "^1.0.0"
-  }
+  "dependencies": {}
 }
